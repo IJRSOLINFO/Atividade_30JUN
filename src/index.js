@@ -141,7 +141,7 @@ app.put("/atualizar/:matricula", (requisição, resposta) => {
     );
     if (!funcionario) {
       return resposta
-        .status(200)
+        .status(404)
         .json({ mensagem: "Funcionário não encontrado." });
     }
     const {
@@ -189,7 +189,7 @@ app.patch("/atualizar/:matricula", (requisição, resposta) => {
     );
     if (!funcionario) {
       return resposta
-        .status(200)
+        .status(404)
         .json({ mensagem: "Funcionário não encontrado." });
     }
     const {
