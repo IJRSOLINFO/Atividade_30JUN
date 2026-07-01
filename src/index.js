@@ -62,7 +62,7 @@ app.get("/", (requisição, resposta) => {
       .json({
         mensagem: "API de Funcionando com Sucesso",
         status: "OK",
-        date: new Date.now(),
+        data: new Date().toLocaleString("pt-BR", { timeZone: "America/Recife" }),
       });
   } catch (error) {
     resposta
