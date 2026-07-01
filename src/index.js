@@ -17,43 +17,63 @@ app.use(express.json());
 // dataAdmissao
 
 const funcionarios = [
-  {
-    matricula: 1,
-    nome: "João Silva",
-    email: "joão.silva@ijrsolinfo.com",
-    cargo: "Secretário",
-    departamento: "Administração",
-    salario: 2500.0,
-    dataAdmissao: "2022-01-15",
-  },
-  {
-    matricula: 2,
-    nome: "Maria Souza",
-    email: "maria.souza@ijrsolinfo.com",
-    cargo: "Analista",
-    departamento: "Financeiro",
-    salario: 3000.0,
-    dataAdmissao: "2022-02-15",
-  },
-  {
-    matricula: 3,
-    nome: "Carlos Pereira",
-    email: "carlos.pereira@ijrsolinfo.com",
-    cargo: "Gerente",
-    departamento: "Vendas",
-    salario: 5000.0,
-    dataAdmissao: "2022-03-01",
-  },
-  {
-    matricula: 4,
-    nome: "João Maria",
-    email: "joao.maria@ijrsolinfo.com",
-    cargo: "Segurança",
-    departamento: "Manuntenção",
-    salario: 2500.0,
-    dataAdmissao: "2022-01-10",
-  },
+  // {
+  //   matricula: 1,
+  //   nome: "João Silva",
+  //   email: "joão.silva@ijrsolinfo.com",
+  //   cargo: "Secretário",
+  //   departamento: "Administração",
+  //   salario: 2500.0,
+  //   dataAdmissao: "2022-01-15",
+  // },
+  // {
+  //   matricula: 2,
+  //   nome: "Maria Souza",
+  //   email: "maria.souza@ijrsolinfo.com",
+  //   cargo: "Analista",
+  //   departamento: "Financeiro",
+  //   salario: 3000.0,
+  //   dataAdmissao: "2022-02-15",
+  // },
+  // {
+  //   matricula: 3,
+  //   nome: "Carlos Pereira",
+  //   email: "carlos.pereira@ijrsolinfo.com",
+  //   cargo: "Gerente",
+  //   departamento: "Vendas",
+  //   salario: 5000.0,
+  //   dataAdmissao: "2022-03-01",
+  // },
+  // {
+  //   matricula: 4,
+  //   nome: "João Maria",
+  //   email: "joao.maria@ijrsolinfo.com",
+  //   cargo: "Segurança",
+  //   departamento: "Manuntenção",
+  //   salario: 2500.0,
+  //   dataAdmissao: "2022-01-10",
+  // },
 ];
+//TODO: Verificar a saúde da API
+app.get("/", (requisição, resposta) => {
+  try {
+    resposta
+      .status(200)
+      .json({
+        mensagem: "API de Funcionando com Sucesso",
+        status: "OK",
+        date: new Date.now(),
+      });
+  } catch (error) {
+    resposta
+      .status(500)
+      .json({
+        mensagem: "Erro ao verificar a saúde da API.",
+        erro: error.message,
+      });
+  }
+});
+
 app.get("/listar", (requisição, resposta) => {
   try {
     if (funcionarios.length === 0) {
@@ -161,7 +181,7 @@ app.put("/atualizar/:matricula", (requisição, resposta) => {
       !novoDataAdmissao
     ) {
       return resposta
-        .status(201)
+        .status(200)
         .json({ mensagem: "Todos os campos são obrigatórios." });
     }
     funcionario.nome = novoNome;
@@ -211,42 +231,51 @@ app.patch("/atualizar/:matricula", (requisição, resposta) => {
       .json({ mensagem: "Funcionário atualizado com sucesso.", funcionario });
   } catch {
     error;
-    resposta
-      .status(500)
-      .json({
-        mensagem: "Erro ao atualizar funcionário.",
-        erro: error.message,
-      });
+    resposta.status(500).json({
+      mensagem: "Erro ao atualizar funcionário.",
+      erro: error.message,
+    });
   }
 });
 
 app.delete("/excluir/todos", (requisição, resposta) => {
   try {
     funcionarios.length = 0;
-    resposta.status(200).json({ mensagem: "Todos os funcionários foram excluídos." });
+    resposta
+      .status(200)
+      .json({ mensagem: "Todos os funcionários foram excluídos." });
   } catch (error) {
-    resposta.status(500).json({mensagem: "Erro ao excluir funcionários.",erro: error.message}); 
+    resposta
+      .status(500)
+      .json({ mensagem: "Erro ao excluir funcionários.", erro: error.message });
   }
 });
 
 app.delete("/excluir/:matricula", (requisição, resposta) => {
   try {
     const matricula = requisição.params.matricula;
-    const funcionarioIndex = funcionarios.findIndex(funcionario => funcionario.matricula === matricula);
+    const funcionarioIndex = funcionarios.findIndex(
+      (funcionario) => funcionario.matricula === matricula,
+    );
     if (funcionarioIndex === -1) {
-      return resposta.status(404).json({ mensagem: "Funcionário não encontrado." });
+      return resposta
+        .status(404)
+        .json({ mensagem: "Funcionário não encontrado." });
     }
     funcionarios.splice(funcionarioIndex, 1);
-    resposta.status(200).json({ mensagem: "Funcionário excluído com sucesso." });
+    resposta
+      .status(200)
+      .json({ mensagem: "Funcionário excluído com sucesso." });
   } catch (error) {
-    resposta.status(500).json({mensagem: "Erro ao excluir funcionário.",erro: error.message}); 
+    resposta
+      .status(500)
+      .json({ mensagem: "Erro ao excluir funcionário.", erro: error.message });
   }
 });
 
 app.listen(PORTA, () => {
   console.log("O Servidor está em execução!");
 });
-
 
 // {
 //   "matricula": "6",
