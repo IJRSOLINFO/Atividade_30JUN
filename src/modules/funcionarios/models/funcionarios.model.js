@@ -47,7 +47,7 @@ class FuncionarioModel {
     );
     return funcionario;
   }
-  static atualizar(
+  static atualizarTotal(matricula,
     novoNome,
     novoEmail,
     novoCargo,
@@ -55,13 +55,36 @@ class FuncionarioModel {
     novoSalario,
     novoDataAdmissao,
   ) {
-    const funcionario = FuncionarioModel.listar();
+    const funcionario = FuncionarioModel.listar(matricula);
+    if (!funcionario) {
+      return null;
+    }
     funcionario.nome = novoNome;
     funcionario.email = novoEmail;
     funcionario.cargo = novoCargo;
     funcionario.departamento = novoDepartamento;
     funcionario.salario = novoSalario;
     funcionario.dataAdmissao = novoDataAdmissao;
+    return funcionario;
+  }
+  static atualizarParcial(matricula,
+    novoNome,
+    novoEmail,
+    novoCargo,
+    novoDepartamento,
+    novoSalario,
+    novoDataAdmissao,
+  ) {
+    const funcionario = FuncionarioModel.listar(matricula);
+     if (!funcionario) {
+      return null;
+    }
+    funcionario.nome = novoNome || funcionario.nome;
+    funcionario.email = novoEmail || funcionario.email;
+    funcionario.cargo = novoCargo || funcionario.cargo;
+    funcionario.departamento = novoDepartamento || funcionario.departamento;
+    funcionario.salario = novoSalario || funcionario.salario;
+    funcionario.dataAdmissao = novoDataAdmissao || funcionario.dataAdmissao;
     return funcionario;
   }
 

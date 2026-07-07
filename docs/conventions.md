@@ -1,3 +1,4 @@
+//COnvenções: É a Voga,vai me dizer tudo como dever ser feito dentro CÓDIGO.
 # Coding Conventions
 
 Este documento define o padrão de nomenclatura e organização adotado no projeto. Todas as novas implementações devem seguir estas convenções para garantir consistência, legibilidade e facilidade de manutenção.

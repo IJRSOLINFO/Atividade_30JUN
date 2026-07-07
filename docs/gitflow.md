@@ -1,3 +1,4 @@
+//Como deve ser feito o Fluxo trabalhado dentro do GIT e GITHUB. 
 # Git Flow
 
 Este documento define o fluxo de trabalho com Git adotado neste projeto. Todos os colaboradores devem seguir estas diretrizes para manter um histórico limpo, facilitar revisões e reduzir conflitos.
@@ -345,3 +346,4 @@ develop
 - **Git Flow** para organização das branches.
 - **Conventional Commits** para padronização das mensagens de commit.
 - **Semantic Versioning (SemVer)** para controle de versões.
+

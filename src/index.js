@@ -57,20 +57,16 @@ const funcionarios = [
 //TODO: Verificar a saúde da API
 app.get("/", (requisição, resposta) => {
   try {
-    resposta
-      .status(200)
-      .json({
-        mensagem: "API de Funcionando com Sucesso",
-        status: "OK",
-        data: new Date().toLocaleString("pt-BR", { timeZone: "America/Recife" }),
-      });
+    resposta.status(200).json({
+      mensagem: "API de Funcionando com Sucesso",
+      status: "OK",
+      data: new Date().toLocaleString("pt-BR", { timeZone: "America/Recife" }),
+    });
   } catch (error) {
-    resposta
-      .status(500)
-      .json({
-        mensagem: "Erro ao verificar a saúde da API.",
-        erro: error.message,
-      });
+    resposta.status(500).json({
+      mensagem: "Erro ao verificar a saúde da API.",
+      erro: error.message,
+    });
   }
 });
 
