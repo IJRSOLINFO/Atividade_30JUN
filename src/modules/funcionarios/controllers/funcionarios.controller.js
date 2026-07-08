@@ -1,4 +1,5 @@
 //TODO: esse é o controlado, articulador de requisições, ele não deve conter regras de negócio, apenas chamar os serviços e retornar a resposta para o usuário
+//? O  controller é responsável por receber as requisições do usuário, chamar os serviços e retornar a resposta para o usuário. Ele é o responsável por tratar os erros e retornar as respostas adequadas para o usuário.
 
 import FuncionarioModel from "../models/funcionarios.model.js";
 
@@ -48,7 +49,7 @@ class FuncionarioController {
     }
   }
 
-  static listar(requisição, resposta) {
+  static listarTodos(requisição, resposta) {
     try {
       const funcionarios = FuncionarioModel.listar();
       if (funcionarios.length === 0) {
