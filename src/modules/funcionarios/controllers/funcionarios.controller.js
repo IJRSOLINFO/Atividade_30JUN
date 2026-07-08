@@ -51,7 +51,7 @@ class FuncionarioController {
 
   static listarTodos(requisição, resposta) {
     try {
-      const funcionarios = FuncionarioModel.listar();
+      const funcionarios = FuncionarioModel.listarTodos();
       if (funcionarios.length === 0) {
         resposta
           .status(200)

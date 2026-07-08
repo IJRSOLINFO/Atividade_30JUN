@@ -57,7 +57,7 @@ class FuncionarioModel {
     novoSalario,
     novoDataAdmissao,
   ) {
-    const funcionario = FuncionarioModel.listar(matricula);
+    const funcionario = FuncionarioModel.buscarPorMatricula(matricula);
     if (!funcionario) {
       return null;
     }
