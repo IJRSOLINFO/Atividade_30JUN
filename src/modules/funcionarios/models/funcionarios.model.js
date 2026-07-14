@@ -1,96 +1,52 @@
 //! O model é responsável por gerenciar os dados da aplicação, ou seja, ele é responsável por armazenar, buscar, atualizar e deletar os dados dos funcionários. Ele é o responsável por interagir com o banco de dados e retornar os dados para o controller.
 
-import funcionarios from "../../../config/database.js"
+import conexao from "../../../config/database.js"
 
 class FuncionarioModel {
-  constructor(
-    matricula,
-    nome,
-    email,
-    cargo,
-    departamento,
-    salario,
-    dataAdmissao,
-  ) {
-    this.matricula = matricula;
-    this.nome = nome;
-    this.email = email;
-    this.cargo = cargo;
-    this.departamento = departamento;
-    this.salario = salario;
-    this.dataAdmissao = dataAdmissao;
+    
+  static async cadastrar(matricula,nome,email,cargo,departamento,salario,dataAdmissao) {
+    const dados = [matricula,nome,email,cargo,departamento,salario,dataAdmissao];
+    const query = `text INSERT INTO funcionarios (matricula, nome, email, cargo, departamento, salario, data_admissao) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`
+    const resultado = await conexao.query(query, dados);
+    return resultado.rows[0];
   }
-  static cadastrar(
-    matricula,
-    nome,
-    email,
-    cargo,
-    departamento,
-    salario,
-    dataAdmissao,
-  ) {
-    const dados = {
-      matricula,
-      nome,
-      email,
-      cargo,
-      departamento,
-      salario,
-      dataAdmissao,
-    };
-    funcionarios.push(dados);
+   
+  static async listarTodos() {
+    const query = `SELECT * FROM funcionarios`;
+    const resultado = await conexao.query(query);
+    return resultado;
   }
-  static listarTodos() {
-    return funcionarios;
+    
+  static async buscarPorMatricula(matricula) {
+    const dados = [matricula];
+    const query = `SELECT * FROM funcionarios WHERE matricula = $1`;
+    const resultado = await conexao.query(query, dados);
+    return resultado;
   }
-  static buscarPorMatricula(matricula) {
-    const funcionario = funcionarios.find(
-      (funcionario) => funcionario.matricula === matricula,
-    );
-    return funcionario;
-  }
-  static atualizarTotal(matricula,
-    novoNome,
-    novoEmail,
-    novoCargo,
-    novoDepartamento,
-    novoSalario,
-    novoDataAdmissao,
-  ) {
-    const funcionario = FuncionarioModel.buscarPorMatricula(matricula);
-    if (!funcionario) {
+    
+  static async atualizarTotal(matricula,novoNome,novoEmail,novoCargo,novoDepartamento,novoSalario,novoDataAdmissao) {
+    const funcionario = await FuncionarioModel.buscarPorMatricula(matricula);
+    if (funcionario.length === 0) {
       return null;
     }
-    funcionario.nome = novoNome;
-    funcionario.email = novoEmail;
-    funcionario.cargo = novoCargo;
-    funcionario.departamento = novoDepartamento;
-    funcionario.salario = novoSalario;
-    funcionario.dataAdmissao = novoDataAdmissao;
-    return funcionario;
+    const dados = [novoNome, novoEmail, novoCargo, novoDepartamento, novoSalario, novoDataAdmissao, matricula];
+    const query = `UPDATE funcionarios SET nome = $2, email = $3, cargo = $4, departamento = $5, salario = $6, data_admissao = $7 WHERE matricula = $1 RETURNING *`;
+    const resultado = await conexao.query(query, dados);
+    return resultado.rows[0];
+
   }
-  static atualizarParcial(matricula,
-    novoNome,
-    novoEmail,
-    novoCargo,
-    novoDepartamento,
-    novoSalario,
-    novoDataAdmissao,
-  ) {
-    const funcionario = FuncionarioModel.listar(matricula);
-     if (!funcionario) {
+  static async atualizarTotal(matricula,novoNome,novoEmail,novoCargo,novoDepartamento,novoSalario,novoDataAdmissao) {
+    const funcionario = await FuncionarioModel.buscarPorMatricula(matricula);
+    if (funcionario.length === 0) {
       return null;
     }
-    funcionario.nome = novoNome || funcionario.nome;
-    funcionario.email = novoEmail || funcionario.email;
-    funcionario.cargo = novoCargo || funcionario.cargo;
-    funcionario.departamento = novoDepartamento || funcionario.departamento;
-    funcionario.salario = novoSalario || funcionario.salario;
-    funcionario.dataAdmissao = novoDataAdmissao || funcionario.dataAdmissao;
-    return funcionario;
+    const dados = [novoNome, novoEmail, novoCargo, novoDepartamento, novoSalario, novoDataAdmissao, matricula];
+    const query = `UPDATE funcionarios SET nome =  coalesce ($2,nome), email =  coalesce ($3,email), cargo = coalesce ($4,cargo), departamento = coalesce ($5,departamento), salario = coalesce ($6,salario), data_admissao = coalesce ($7,data_admissao) WHERE matricula = $1 RETURNING *`;
+    const resultado = await conexao.query(query, dados);
+    return resultado.rows[0];
   }
 
-  static deletarPorMatricula(matricula) {
+  static asyncdeletarPorMatricula(matricula) {
     const index = funcionarios.findIndex(
       (funcionario) => funcionario.matricula === matricula,
     );
