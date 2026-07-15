@@ -4,54 +4,24 @@
 import FuncionarioModel from "../models/funcionarios.model.js";
 
 class FuncionarioController {
-  static cadastrar(requisição, resposta) {
+  static async cadastrar(requisição, resposta) {
     //TODO: Implementar lógica de cadastro
     try {
-      const {
-        matricula,
-        nome,
-        email,
-        cargo,
-        departamento,
-        salario,
-        dataAdmissao,
-      } = requisição.body;
-      if (
-        !matricula ||
-        !nome ||
-        !email ||
-        !cargo ||
-        !departamento ||
-        !salario ||
-        !dataAdmissao
-      )
-        return resposta
-          .status(400)
-          .json({ mensagem: "Todos os campos são obrigatórios." });
+      const {matricula,  nome,  email,  cargo,  departamento,  salario,  dataAdmissao,} = requisição.body;
+      if (!matricula || !nome || !email || !cargo || !departamento || !salario || !dataAdmissao)
+        return resposta.status(400).json({ mensagem: "Todos os campos são obrigatórios." });
 
-      FuncionarioModel.cadastrar(
-        matricula,
-        nome,
-        email,
-        cargo,
-        departamento,
-        salario,
-        dataAdmissao,
-      );
-      resposta
-        .status(201)
-        .json({ mensagem: "Funcionário cadastrado com sucesso." });
+      await FuncionarioModel.cadastrar(matricula,nome,email,cargo,departamento,salario,dataAdmissao,);
+      resposta.status(201).json({ mensagem: "Funcionário cadastrado com sucesso." });
+
     } catch (error) {
-      resposta.status(500).json({
-        mensagem: "Erro ao cadastrar funcionário.",
-        erro: error.message,
-      });
+      resposta.status(500).json({mensagem: "Erro ao cadastrar funcionário.",erro: error.message,});
     }
   }
 
-  static listarTodos(requisição, resposta) {
+  static async listarTodos(requisição, resposta) {
     try {
-      const funcionarios = FuncionarioModel.listarTodos();
+      const funcionarios = await FuncionarioModel.listarTodos();
       if (funcionarios.length === 0) {
         resposta
           .status(200)
@@ -65,10 +35,10 @@ class FuncionarioController {
       });
     }
   }
-  static buscarPorMatricula(requisição, resposta) {
+  static async buscarPorMatricula(requisição, resposta) {
     try {
       const matricula = requisição.params;
-      const funcionario = FuncionarioModel.buscarPorMatricula(matricula);
+      const funcionario = await FuncionarioModel.buscarPorMatricula(matricula);
       if (!funcionario) {
         return resposta
           .status(200)
@@ -81,12 +51,12 @@ class FuncionarioController {
         .json({ mensagem: "Erro ao buscar funcionário.", erro: error.message });
     }
   }
-  static atualizarTotal(requisição, resposta) {
+  static async atualizarTotal(requisição, resposta) {
     try {
       const matricula = requisição.params.matricula;
       const { nome, email, cargo, departamento, salario, dataAdmissao } =
         requisição.body;
-      const funcionario = FuncionarioModel.atualizarTotal(
+      const funcionario = await FuncionarioModel.atualizarTotal(
         matricula,
         nome,
         email,
@@ -104,12 +74,12 @@ class FuncionarioController {
     }
   }
 
-  static atualizarParcial(requisição, resposta) {
+  static async atualizarParcial(requisição, resposta) {
     try {
       const matricula = requisição.params.matricula;
       const { nome, email, cargo, departamento, salario, dataAdmissao } =
         requisição.body;
-      const funcionario = FuncionarioModel.atualizarParcial(
+      const funcionario = await FuncionarioModel.atualizarParcial(
         matricula,
         nome,
         email,
@@ -127,9 +97,9 @@ class FuncionarioController {
     }
   }
 
-  static deletarTodos(requisição, resposta) {
+  static async deletarTodos(requisição, resposta) {
     try {
-      FuncionarioModel.deletarTodos();
+      await FuncionarioModel.deletarTodos();
       resposta
         .status(200)
         .json({ mensagem: "Todos os funcionários foram deletados." });
@@ -141,10 +111,10 @@ class FuncionarioController {
     }
   }
 
-  static deletarPorMatricula(requisição, resposta) {
+  static async deletarPorMatricula(requisição, resposta) {
     try {
       const matricula = requisição.params.matricula;
-      const funcionario = FuncionarioModel.buscarPorMatricula(matricula);
+      const funcionario = await FuncionarioModel.buscarPorMatricula(matricula);
       if (!funcionario) {
         return resposta
           .status(404)
